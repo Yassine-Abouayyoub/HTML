@@ -38,13 +38,14 @@
                     return false;
                 }
                 var password = document.getElementById('pwd').value;
-                if(password.length>=6){
+                if(password.length<6){
                     alert("le mot de passe est inferieur a 6");
                     return false;
                 }
                 var cpassword= document.getElementById('cpwd').value;
                 if(cpassword !== password){
-                    alert("confirmation de mot de passe et diferent a le mot de passe insere")
+                    alert("confirmation de mot de passe et diferent a le mot de passe insere");
+                    return false;
                 }
             }
         </script>
