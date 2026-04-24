@@ -4,55 +4,159 @@
         <meta charset="UTF-8">
         <title>Calculatrice</title>
         <style>
-            fieldset{
-                width: 400px;
+            body{
+                font-family: Arial, sans-serif;
+                background: linear-gradient(135deg, #dfe9f3, #ffffff);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
             }
-            div{
+
+            fieldset{
+                width: 330px;
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
+                border: none;
+                padding: 25px;
+                border-radius: 20px;
+                background: #ffffff;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             }
+
             input{
+                grid-column: 1 / 5;
                 width: 100%;
+                box-sizing: border-box;
+                font-size: 32px;
+                padding: 18px;
+                text-align: right;
+                border: none;
+                border-radius: 12px;
+                background: #f1f3f6;
+                color: #222;
+                outline: none;
+            }
+
+            button{
+                padding: 18px;
                 font-size: 22px;
+                border: none;
+                border-radius: 12px;
+                background: #eef1f5;
+                cursor: pointer;
+                transition: 0.2s;
+            }
+
+            button:hover{
+                background: #dce3ec;
+                transform: scale(1.05);
+            }
+
+            button:active{
+                transform: scale(0.95);
+            }
+
+            button[value="somme"],
+            button[value="sub"],
+            button[value="mult"],
+            button[value="div"]{
+                background: #4f7cff;
+                color: white;
+            }
+
+            button[value="somme"]:hover,
+            button[value="sub"]:hover,
+            button[value="mult"]:hover,
+            button[value="div"]:hover{
+                background: #315eea;
+            }
+
+            button[onclick="affiche_resultat()"]{
+                background: #22c55e;
+                color: white;
+            }
+
+            button[onclick="effacer()"]{
+                background: #ef4444;
+                color: white;
             }
         </style>
     </head>
     <body>
         <fieldset>
-            <input type="text" id="resultat" readonly>
-            <div id="buttons">
-                <button value="7">7</button>
-                <button value="8">8</button>
-                <button value="9">9</button>
-                <button value="/">/</button>
-                <button value="4">4</button>
-                <button value="5">5</button>
-                <button value="6">6</button>
-                <button value="*">*</button>
-                <button value="1">1</button>
-                <button value="2">2</button>
-                <button value="3">3</button>
-                <button value="-">-</button>
-                <button value="0">0</button>
-                <button value="=">=</button>
-                <button value="+">+</button>
-                <button value="c">c</button>
-            </div>
+            <input type="text" id="resultat" value="0" readonly>
+            <button value="7" onclick="valeurs(this.value)">7</button>
+            <button value="8" onclick="valeurs(this.value)">8</button>
+            <button value="9" onclick="valeurs(this.value)">9</button>
+            <button type="button" value="div" onclick="operation(this.value)">/</button>
+            <button value="4" onclick="valeurs(this.value)">4</button>
+            <button value="5" onclick="valeurs(this.value)">5</button>
+            <button value="6" onclick="valeurs(this.value)">6</button>
+            <button type="button" value="mult" onclick="operation(this.value)">*</button>
+            <button value="1" onclick="valeurs(this.value)">1</button>
+            <button value="2" onclick="valeurs(this.value)">2</button>
+            <button value="3" onclick="valeurs(this.value)">3</button>
+            <button type="button" value="sub" onclick="operation(this.value)">-</button>
+            <button value="0" onclick="valeurs(this.value)">0</button>
+            <button type="button" onclick="affiche_resultat()">=</button>
+            <button type="button" value="somme" onclick="operation(this.value)">+</button>
+            <button type="button" onclick="effacer()">c</button>
         </fieldset>
         <script>
+            let resultat = null;
+            let valeur = "";
+            let operation_actuel = null;
+
+            function valeurs(valeurin){
+                valeur = valeur + valeurin;
+                document.getElementById("resultat").value = valeur;
+            }
+
+            function operation(op){
+                calcule();
+                operation_actuel = op;
+            }
+
             function calcule(){
-                let button = getElementById("buttons").value
-                if(button=== "=" || button=== "*" || button=== "-" || button=== "+" || button=== "/"){
-                    let action = button;
-                }
-                if(button==="c"){
-                    let action = "clean"
-                }
-                else{
-                    let valeur = Number(button);
-                    get.ElementById("resultat").valeur = valeur
+                if(valeur === ""){
+                    return;
                 }
 
+                let nombre = Number(valeur);
+
+                if(resultat === null){
+                    resultat = nombre;
+                }
+                else if(operation_actuel === "somme"){
+                    resultat = resultat + nombre;
+                }
+                else if(operation_actuel === "sub"){
+                    resultat = resultat - nombre;
+                }
+                else if(operation_actuel === "mult"){
+                    resultat = resultat * nombre;
+                }
+                else if(operation_actuel === "div"){
+                    resultat = resultat / nombre;
+                }
+
+                valeur = "";
+                document.getElementById("resultat").value = resultat;
+            }
+
+            function affiche_resultat(){
+                calcule();
+                operation_actuel = null;
+            }
+
+            function effacer(){
+                resultat = null;
+                valeur = "";
+                operation_actuel = null;
+                document.getElementById("resultat").value = 0;
             }
         </script>
     </body>
